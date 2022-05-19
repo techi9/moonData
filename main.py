@@ -1,5 +1,6 @@
 import matplotlib.pyplot as plt
 import numpy as np
+from dataView import DataView
 
 from parseData import parseData
 
@@ -7,11 +8,13 @@ from parseData import parseData
 def main():
     tList, dataList = parseData("matera4a-raw.txt")
 
-    # for i, v in enumerate(tList):
-    #     if v > 5:
-    #         tList = tList[:i]
-    #         dataList = dataList[:i]
-    #         break
+    for i, v in enumerate(tList):
+        if v > 5:
+            tList = tList[:i]
+            dataList = dataList[:i]
+            break
+
+    data = DataView(tList, dataList)
 
     St = sum(tList) / len(tList)
     Sd = sum(dataList) / len(dataList)
@@ -21,18 +24,18 @@ def main():
     a = (St * Sd - Std) / (St * St - Stt)
     b = (Std - a * Stt) / St
 
-    x = np.array([0, tList[-1]])
-    y = a * x + b
-    plt.plot(x, y, '-r', label=f'y={a}x+({b})')
-
-    plt.plot(tList, dataList, 'o', color='black');
-
-    plt.title('Linear regression')
-    plt.xlabel('t', color='#1C2833')
-    plt.ylabel('data', color='#1C2833')
-    plt.legend(loc='upper left')
-    plt.grid()
-    plt.show()
+    # x = np.array([0, tList[-1]])
+    # y = a * x + b
+    # plt.plot(x, y, '-r', label=f'y={a}x+({b})')
+    #
+    # plt.plot(tList, dataList, 'o', color='black')
+    #
+    # plt.title('Linear regression')
+    # plt.xlabel('t', color='#1C2833')
+    # plt.ylabel('data', color='#1C2833')
+    # plt.legend(loc='upper left')
+    # plt.grid()
+    # plt.show()
 
 
 if __name__ == '__main__':
