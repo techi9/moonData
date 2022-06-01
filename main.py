@@ -1,5 +1,8 @@
 import matplotlib.pyplot as plt
 import numpy as np
+
+import polinomial
+
 from dataView import DataView
 
 from parseData import parseData
@@ -16,13 +19,14 @@ def main():
 
     data = DataView(tList, dataList)
 
-    St = sum(tList) / len(tList)
-    Sd = sum(dataList) / len(dataList)
-    Std = sum(x*y for (x, y) in zip(tList, dataList)) / len(tList)
-    Stt = sum(x*x for x in tList) / len(tList)
+    k = 4
 
-    a = (St * Sd - Std) / (St * St - Stt)
-    b = (Std - a * Stt) / St
+    A = data.matrFromData(k)
+    B = data.rightSide(k)
+    X = solve(A, B)
+
+
+
 
     # x = np.array([0, tList[-1]])
     # y = a * x + b
