@@ -15,7 +15,6 @@ def parseData(filename: str) -> (list, list):
 
     time_mjd = list(map(float, time_mjd))
     time_value = list(map(float, time_value))
-    time_mjd = list(map(lambda x: (x - time_mjd[0]), time_mjd))
     time_mjd = list(map(lambda x: x * 24 * 60, time_mjd))
 
     if len(time_mjd) != len(time_value):
