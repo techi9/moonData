@@ -36,7 +36,7 @@ class Polynomial:
 
 
     def p(self, x: float):
-        y = 0
+        y = 0.
         for j in range(len(self.X)):
             y += self.X[j] * x ** j
         return y
@@ -51,13 +51,13 @@ def solve(A, B):  # Cholesky decomposition method
     for i in range(len(A)):
         for j in range(len(A)):
             if i == j:
-                summ = 0
+                summ = 0.
                 for k in range(i):
                     summ += G[k][i] ** 2
 
                 G[i][i] = math.sqrt(A[i][i] - summ)
             elif i < j:
-                summ = 0
+                summ = 0.
                 for k in range(i):
                     summ += G[k][i] * G[k][j]
 
@@ -70,7 +70,7 @@ def solve(A, B):  # Cholesky decomposition method
 
     Y[0] = B[0] / G[0][0]
     for i in range(1, len(Y)): # find Y
-        summ = 0
+        summ = 0.
         for k in range(i):
             summ += G[k][i] * Y[k]
 
@@ -78,7 +78,7 @@ def solve(A, B):  # Cholesky decomposition method
 
     X[-1] = Y[-1] / G[-1][-1]
     for i in reversed(range(0,len(Y))): # find X (solution)
-        summ = 0
+        summ = 0.
         for k in range(i+1, len(X)):
             summ += G[i][k]*X[k]
 

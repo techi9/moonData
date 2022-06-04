@@ -1,4 +1,5 @@
 import math
+from copy import deepcopy
 
 from polynomial import Polynomial
 
@@ -8,12 +9,13 @@ def removeErrors(pol: Polynomial, border: float):
     observations = pol.data.Y[:]
     ti = pol.data.X[:]
 
+
     while True:  # removing errors
         removedPoints = 0
         toRem = []
         rms = calcRms(pol)
         for index, (t, obs) in enumerate(zip(ti, observations)):
-            if math.fabs(rms - (obs - pol.p(t))) > border:
+            if math.fabs(rms - (obs - pol.p(t))**2) > border:
                 removedT.append(t)
                 removedObs.append(obs)
                 toRem.append(index)
@@ -32,14 +34,21 @@ def removeErrors(pol: Polynomial, border: float):
 
     return [removedT, removedObs]
 
+# def calcRms(rmsList: list):
+#     n = len(rmsList)
+#     summ = 0.
+#     for r in rmsList:
+#         summ += r**2
+#     return math.sqrt(summ / n)
 
 def calcRms(pol: Polynomial):
-    observations = pol.data.Y[:]
-    ti = pol.data.X[:]
+    observations = pol.data.Y
+    ti = pol.data.X
 
     n = len(ti)
-    summ = 0
+    summ = 0.
     for index, (t, obs) in enumerate(zip(ti, observations)):
-        summ += (pol.p(t) - obs) ** 2
+        summ += (obs - pol.p(t)) ** 2
 
     return math.sqrt(summ / n)
+
