@@ -42,7 +42,7 @@ class Polynomial:
         return y
 
 
-def solve(A, B): # Cholesky decomposition method
+def solve(A, B):  # Cholesky decomposition method
     G = []
     for _ in A:
         G.append([0] * len(A))

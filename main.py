@@ -3,16 +3,20 @@ import matplotlib.pyplot as plt
 from parseData import parseData
 from dataView import DataView
 from polynomial import Polynomial
+from rms import removeErrors
 
 
-def drawRegressionGraph(pol: Polynomial):
+def drawRegressionGraph(pol: Polynomial, removedPoints=None):
+    if removedPoints is not None:
+        plt.plot(*removedPoints, 'o', color='red')
+
     x, y = pol.getGraphData()
 
     plt.plot(x, y, '-r', label=f'y= p(x)')
 
     plt.plot(pol.data.X, pol.data.Y, 'o', color='black')
 
-    plt.title('Linear regression')
+    plt.title('Polynomial regression')
     plt.xlabel('t', color='#1C2833')
     plt.ylabel('data', color='#1C2833')
     plt.legend(loc='upper left')
@@ -41,8 +45,10 @@ def main():
     print(len(sessions))
 
     pol = Polynomial(sessions[4], 4)
+    polorg = Polynomial(sessions[4], 4)
 
-    drawRegressionGraph(pol)
+    removed = removeErrors(pol, 5)
+    drawRegressionGraph(pol, removed)
 
     # plt.plot(x, y, '-r', label=f'y= p(x)')
     #

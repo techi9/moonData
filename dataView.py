@@ -1,5 +1,3 @@
-from functools import lru_cache
-
 
 class DataView:
     def __init__(self, x: list, y: list):
@@ -12,7 +10,6 @@ class DataView:
         self._avgX = sum(x) / len(x)
         self._avgY = sum(y) / len(y)
 
-    @lru_cache(maxsize=None)
     def avgXpowKY(self, k: int) -> float:
 
         summ = 0
@@ -21,7 +18,6 @@ class DataView:
 
         return summ / len(self.X)
 
-    @lru_cache(maxsize=None)
     def avgXpowK(self, k: int) -> float:
         summ = 0
         for x in self.X:
