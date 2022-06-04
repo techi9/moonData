@@ -5,19 +5,13 @@ from polynomial import Polynomial
 
 def removeErrors(pol: Polynomial, border: float):
     removedT, removedObs = [], []
-    n = len(pol.data.X)
     observations = pol.data.Y[:]
     ti = pol.data.X[:]
-
-    summ = 0
-    for index, (t, obs) in enumerate(zip(ti, observations)):
-        summ += (pol.p(t) - obs) ** 2
-
-    rms = math.sqrt(summ / n)
 
     while True:  # removing errors
         removedPoints = 0
         toRem = []
+        rms = calcRms(pol)
         for index, (t, obs) in enumerate(zip(ti, observations)):
             if math.fabs(rms - (obs - pol.p(t))) > border:
                 removedT.append(t)
@@ -37,3 +31,15 @@ def removeErrors(pol: Polynomial, border: float):
         pol.solveX()  # recalc polynom
 
     return [removedT, removedObs]
+
+
+def calcRms(pol: Polynomial):
+    observations = pol.data.Y[:]
+    ti = pol.data.X[:]
+
+    n = len(ti)
+    summ = 0
+    for index, (t, obs) in enumerate(zip(ti, observations)):
+        summ += (pol.p(t) - obs) ** 2
+
+    return math.sqrt(summ / n)

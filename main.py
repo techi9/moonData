@@ -6,13 +6,15 @@ from polynomial import Polynomial
 from rms import removeErrors
 
 
-def drawRegressionGraph(pol: Polynomial, removedPoints=None):
+def drawRegressionGraph(pol: Polynomial, removedPoints, old: Polynomial):
     if removedPoints is not None:
         plt.plot(*removedPoints, 'o', color='red')
 
     x, y = pol.getGraphData()
+    x1, y1 = old.getGraphData()
 
     plt.plot(x, y, '-r', label=f'y= p(x)')
+    plt.plot(x1, y1, '-', label=f'old', color='gray')
 
     plt.plot(pol.data.X, pol.data.Y, 'o', color='black')
 
@@ -39,16 +41,14 @@ def main():
             prevI = i
         prevT = t
 
-
-
     # plt.ion()
     print(len(sessions))
-
-    pol = Polynomial(sessions[4], 4)
-    polorg = Polynomial(sessions[4], 4)
+    s = 3
+    pol = Polynomial(sessions[s], 4)
+    polorg = Polynomial(sessions[s], 4)
 
     removed = removeErrors(pol, 5)
-    drawRegressionGraph(pol, removed)
+    drawRegressionGraph(pol, removed, polorg)
 
     # plt.plot(x, y, '-r', label=f'y= p(x)')
     #
