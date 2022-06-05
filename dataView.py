@@ -3,9 +3,9 @@ class DataView:
     def __init__(self, x: list, y: list):
         self.X = x[:]
         self.Y = y[:]
-
+        self.firstDate = x[0]
         self.X = list(map(lambda xx: (xx - self.X[0]), self.X))  # normalise time
-
+        self.X = list(map(lambda xx: xx * 24 * 60, self.X))
         self.n = len(x)
         self._avgX = sum(x) / len(x)
         self._avgY = sum(y) / len(y)

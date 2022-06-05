@@ -4,6 +4,7 @@ from parseData import parseData
 from dataView import DataView
 from polynomial import Polynomial
 from rms import removeErrors, calcRms
+from createNormalPoints import createNormalPoints
 
 
 def drawRegressionGraph(pol: Polynomial, removedPoints, old: Polynomial):
@@ -35,21 +36,21 @@ def main():
     prevT = tList[0]  # cut data for sessions
     prevI = 0
     for i, t in enumerate(tList):
-        if t - prevT > 4:
+        if t - prevT > 5 / 24 / 60:  # Days to mins
             if i - prevI > 2:
                 sessions.append(DataView(tList[prevI:i], dataList[prevI:i]))
             prevI = i
         prevT = t
 
     # plt.ion()
-    print(len(sessions))
-    s = 1
+    print(f"found {len(sessions)} sessions")
+    s = 3
     k = 3
     e = 3
     pol = Polynomial(sessions[s], k)
     polorg = Polynomial(sessions[s], k)
-    print(calcRms(polorg))
     removed = removeErrors(pol, e)
+    print(createNormalPoints([pol]))
     drawRegressionGraph(pol, removed, polorg)
 
     # plt.plot(x, y, '-r', label=f'y= p(x)')
