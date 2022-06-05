@@ -12,10 +12,10 @@ def removeErrors(pol: Polynomial, border: float):
     while True:  # removing errors
         removedPoints = 0
         toRem = []
-
+        rms = calcRms(pol)
         for index, (t, obs) in enumerate(zip(ti, observations)):
 
-            if (obs - pol.p(t)) ** 2 > border:
+            if math.fabs(obs - pol.p(t)) > border*rms:
                 removedT.append(t)
                 removedObs.append(obs)
                 toRem.append(index)

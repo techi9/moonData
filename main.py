@@ -44,7 +44,7 @@ def main():
 
     # plt.ion()
     print(f"found {len(sessions)} sessions")
-    s = 3
+    s = 0
     k = 3
     e = 3
     pol = Polynomial(sessions[s], k)
