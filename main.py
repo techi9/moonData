@@ -4,22 +4,25 @@ from parseData import parseData
 from dataView import DataView
 from polynomial import Polynomial
 from rms import removeErrors, calcRms
-from createNormalPoints import createNormalPoints
+from writeToFile import writeToFile
 
 
-def drawRegressionGraph(pol: Polynomial, removedPoints, old: Polynomial):
+def drawRegressionGraph(pol: Polynomial, removedPoints=None, old = None):
     if removedPoints is not None:
         plt.plot(*removedPoints, 'o', color='red')
+    if old is not None:
+        x1, y1 = old.getGraphData()
+        plt.plot(x1, y1, '-r', label=f'old')
 
     x, y = pol.getGraphData()
-    x1, y1 = old.getGraphData()
+
 
     plt.plot(x, y, '-', label=f'y= p(x)', color='gray', linewidth=4)
-    plt.plot(x1, y1, '-r', label=f'old')
+
 
     plt.plot(pol.data.X, pol.data.Y, 'o', color='black')
 
-    plt.title('Polynomial regression')
+    plt.title(f'Polynomial regression, rms = {calcRms(pol)}')
     plt.xlabel('t', color='#1C2833')
     plt.ylabel('data', color='#1C2833')
     plt.legend(loc='upper left')
@@ -44,14 +47,21 @@ def main():
 
     # plt.ion()
     print(f"found {len(sessions)} sessions")
-    s = 0
+
     k = 3
-    e = 3
-    pol = Polynomial(sessions[s], k)
-    polorg = Polynomial(sessions[s], k)
-    removed = removeErrors(pol, e)
-    print(createNormalPoints([pol]))
-    drawRegressionGraph(pol, removed, polorg)
+    e = 2
+
+    polynoms = []
+    removed = []
+
+    for session in sessions:
+        pol = Polynomial(session, k)
+        removed.append(removeErrors(pol, e))
+        polynoms.append(Polynomial(session, k))
+
+    writeToFile(polynoms, 'res.txt')
+
+    drawRegressionGraph(polynoms[2], removed[2])
 
     # plt.plot(x, y, '-r', label=f'y= p(x)')
     #

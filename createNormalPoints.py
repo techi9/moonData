@@ -5,6 +5,7 @@ from rms import calcRms
 
 
 def createNormalPoints(sessions: List[Polynomial]) -> list:
+
     normalPoints = []
 
     for session in sessions:
