@@ -3,7 +3,7 @@ import matplotlib.pyplot as plt
 from parseData import parseData
 from dataView import DataView
 from polynomial import Polynomial
-from rms import removeErrors
+from rms import removeErrors, calcRms
 
 
 def drawRegressionGraph(pol: Polynomial, removedPoints, old: Polynomial):
@@ -43,12 +43,12 @@ def main():
 
     # plt.ion()
     print(len(sessions))
-    s = 3
-    k = 4
+    s = 1
+    k = 3
     e = 3
     pol = Polynomial(sessions[s], k)
     polorg = Polynomial(sessions[s], k)
-
+    print(calcRms(polorg))
     removed = removeErrors(pol, e)
     drawRegressionGraph(pol, removed, polorg)
 
