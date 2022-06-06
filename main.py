@@ -1,4 +1,5 @@
 import matplotlib.pyplot as plt
+import sys
 
 from parseData import parseData
 from dataView import DataView
@@ -48,9 +49,10 @@ def main():
     # plt.ion()
     print(f"found {len(sessions)} sessions")
 
-    k = 2
+
+    k = 3
     e = 3
-    s = 1
+    s = int(sys.argv[1]) - 1
 
     polynoms = []
     removed = []
