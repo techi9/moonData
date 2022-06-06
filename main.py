@@ -17,7 +17,7 @@ def drawRegressionGraph(pol: Polynomial, removedPoints=None, old = None):
     x, y = pol.getGraphData()
 
 
-    plt.plot(x, y, '-', label=f'y= p(x)', color='gray', linewidth=4)
+    plt.plot(x, y, '-', label=f'y= p(x), k={pol.k}', color='gray', linewidth=4)
 
 
     plt.plot(pol.data.X, pol.data.Y, 'o', color='black')
@@ -48,8 +48,9 @@ def main():
     # plt.ion()
     print(f"found {len(sessions)} sessions")
 
-    k = 3
-    e = 2
+    k = 2
+    e = 3
+    s = 1
 
     polynoms = []
     removed = []
@@ -59,9 +60,9 @@ def main():
         removed.append(removeErrors(pol, e))
         polynoms.append(Polynomial(session, k))
 
-    writeToFile(polynoms, 'res.txt')
+    # writeToFile(polynoms, 'res.txt')
 
-    drawRegressionGraph(polynoms[2], removed[2])
+    drawRegressionGraph(polynoms[s], removed[s])
 
     # plt.plot(x, y, '-r', label=f'y= p(x)')
     #
