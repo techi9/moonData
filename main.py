@@ -1,4 +1,5 @@
 import matplotlib.pyplot as plt
+from keyboard import add_hotkey
 
 from parseData import parseData
 from dataView import DataView
@@ -6,24 +7,45 @@ from polynomial import Polynomial
 from rms import removeErrors, calcRms
 from writeToFile import writeToFile
 
+k = 3  # cтепень многочлена
+e = 3  # ошибка e*rms
+s = 0  # индекс сессии
 
-def drawRegressionGraph(pol: Polynomial, removedPoints=None, old = None):
+polynoms = []
+
+
+def incK():
+    global k
+    k += 1
+    buildRegr()
+
+
+def buildRegr():
+    global polynoms, e
+    polynoms[s].k = k
+    removed = removeErrors(polynoms[s], e)
+    drawRegressionGraph(polynoms[s], removed)
+
+
+
+def drawRegressionGraph(pol: Polynomial, removedPoints=None, old=None):
     if removedPoints is not None:
         plt.plot(*removedPoints, 'o', color='red')
+
     if old is not None:
         x1, y1 = old.getGraphData()
         plt.plot(x1, y1, '-r', label=f'old')
 
     x, y = pol.getGraphData()
 
+    plt.clf()
 
-    plt.plot(x, y, '-', label=f'y= p(x)', color='gray', linewidth=4)
-
+    plt.plot(x, y, '-', label=f'y= p(x) , k={pol.k}, e={e}', color='gray', linewidth=4)
 
     plt.plot(pol.data.X, pol.data.Y, 'o', color='black')
 
     plt.title(f'Polynomial regression, rms = {calcRms(pol)}')
-    plt.xlabel('t', color='#1C2833')
+    plt.xlabel('t(min)', color='#1C2833')
     plt.ylabel('data', color='#1C2833')
     plt.legend(loc='upper left')
     plt.grid()
@@ -51,17 +73,18 @@ def main():
     k = 3
     e = 2
 
-    polynoms = []
+    global polynoms
     removed = []
 
     for session in sessions:
         pol = Polynomial(session, k)
-        removed.append(removeErrors(pol, e))
+        # removed.append(removeErrors(pol, e))
         polynoms.append(Polynomial(session, k))
 
     writeToFile(polynoms, 'res.txt')
 
-    drawRegressionGraph(polynoms[2], removed[2])
+    # drawRegressionGraph(polynoms[2], removed[2])
+    incK()
 
     # plt.plot(x, y, '-r', label=f'y= p(x)')
     #
