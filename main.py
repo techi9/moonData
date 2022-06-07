@@ -1,6 +1,7 @@
 import matplotlib.pyplot as plt
 import sys
 
+
 from parseData import parseData
 from dataView import DataView
 from polynomial import Polynomial
@@ -18,7 +19,7 @@ def drawRegressionGraph(pol: Polynomial, removedPoints=None, old=None):
     x, y = pol.getGraphData()
 
 
-    plt.plot(x, y, '-', label=f'y= p(x), k={pol.k}', color='gray', linewidth=4)
+    plt.plot(x, y, '-', label=f'y= p(x), k={pol.k - 1}', color='gray', linewidth=4)
 
 
     plt.plot(pol.data.X, pol.data.Y, 'o', color='black')
@@ -62,8 +63,9 @@ def main():
         removed.append(removeErrors(pol, e))
         polynoms.append(Polynomial(session, k))
 
-    writeToFile(polynoms, 'res.txt')
-
+    # writeToFile(polynoms, 'res.txt')
+    polynoms[s].k = 4
+    polynoms[s].solveX(1)
     drawRegressionGraph(polynoms[s], removed[s])
 
     # plt.plot(x, y, '-r', label=f'y= p(x)')

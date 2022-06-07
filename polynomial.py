@@ -1,6 +1,9 @@
 import math
 
+import numpy as np  # t
+
 from dataView import DataView
+
 
 class Polynomial:
     def __init__(self, data: DataView, k: int):
@@ -18,10 +21,57 @@ class Polynomial:
         self._k = newK
         self.solveX()
 
-    def solveX(self):
+    def solveX(self, check=0):
         A = self.data.matrFromData(self._k)
         B = self.data.rightSide(self._k)
         self.X = solve(A, B)
+
+        if check:
+
+
+            rms = self.cRms()
+
+            X = np.array([self.data.X])
+            o = np.ones_like(X)
+            # X = np.array([o, X, X*X])
+            # X = np.array([o, X, X*X, X*X*X])
+            X = np.array([o, X, X*X, X*X*X, X*X*X*X])
+            # X = np.array([o, X, X*X, X*X*X, X*X*X*X, X*X*X*X*X])
+
+            # print(X.shape)
+            X = np.squeeze(X, axis=1)
+
+            # X = np.matrix(self.data.X)
+            # Xt = np.matrix(self.data.X).transpose()
+            W = []
+            for i in range(len(self.data.X)):
+                t = [0] * len(self.data.X)
+                t[i] =(rms * rms)
+                W.append(t)
+            W = np.matrix(W)
+
+            # print(X.T.shape)
+            # print(W.shape)
+
+            # matr = X.T @ W @ X
+            #
+            # print(matr.shape)
+            # print(matr)
+            matr = np.linalg.inv(X @ W @ X.T)
+
+            # print(matr.shape)
+            matr = np.abs(matr)
+            matr = np.sqrt(matr)
+            d = np.diag(matr)
+
+            # print(self.X)
+            # print(d)
+
+            for i in range(self._k):
+                # print(f"{i}   {math.fabs(self.X[i])} < {3 * d[i]}")
+                if math.fabs(self.X[i]) < 3 * d[i]:
+                    print(f"{i}   {math.fabs(self.X[i])} < {3 * d[i]}")
+                    # print(f"{i} worked")
 
     def getGraphData(self):
 
@@ -34,12 +84,22 @@ class Polynomial:
 
         return x, y
 
-
     def p(self, x: float):
         y = 0.
         for j in range(len(self.X)):
             y += self.X[j] * x ** j
         return y
+
+    def cRms(self):
+        observations = self.data.Y
+        ti = self.data.X
+
+        n = len(ti)
+        summ = 0.
+        for index, (t, obs) in enumerate(zip(ti, observations)):
+            summ += (obs - self.p(t)) ** 2
+
+        return math.sqrt(summ / n)
 
 
 def solve(A, B):  # Cholesky decomposition method
@@ -69,7 +129,7 @@ def solve(A, B):  # Cholesky decomposition method
     X = [0] * len(A)
 
     Y[0] = B[0] / G[0][0]
-    for i in range(1, len(Y)): # find Y
+    for i in range(1, len(Y)):  # find Y
         summ = 0.
         for k in range(i):
             summ += G[k][i] * Y[k]
@@ -77,10 +137,10 @@ def solve(A, B):  # Cholesky decomposition method
         Y[i] = (B[i] - summ) / G[i][i]
 
     X[-1] = Y[-1] / G[-1][-1]
-    for i in reversed(range(0,len(Y))): # find X (solution)
+    for i in reversed(range(0, len(Y))):  # find X (solution)
         summ = 0.
-        for k in range(i+1, len(X)):
-            summ += G[i][k]*X[k]
+        for k in range(i + 1, len(X)):
+            summ += G[i][k] * X[k]
 
         X[i] = (Y[i] - summ) / G[i][i]
 
