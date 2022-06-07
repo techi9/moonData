@@ -8,7 +8,7 @@ from rms import removeErrors, calcRms
 from writeToFile import writeToFile
 
 
-def drawRegressionGraph(pol: Polynomial, removedPoints=None, old = None):
+def drawRegressionGraph(pol: Polynomial, removedPoints=None, old=None):
     if removedPoints is not None:
         plt.plot(*removedPoints, 'o', color='red')
     if old is not None:
@@ -62,7 +62,7 @@ def main():
         removed.append(removeErrors(pol, e))
         polynoms.append(Polynomial(session, k))
 
-    # writeToFile(polynoms, 'res.txt')
+    writeToFile(polynoms, 'res.txt')
 
     drawRegressionGraph(polynoms[s], removed[s])
 
