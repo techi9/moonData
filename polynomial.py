@@ -28,50 +28,36 @@ class Polynomial:
 
         if check:
 
-
             rms = self.cRms()
 
-            X = np.array([self.data.X])
-            o = np.ones_like(X)
-            # X = np.array([o, X, X*X])
-            # X = np.array([o, X, X*X, X*X*X])
-            X = np.array([o, X, X*X, X*X*X, X*X*X*X])
-            # X = np.array([o, X, X*X, X*X*X, X*X*X*X, X*X*X*X*X])
+            X = []
+            for i in range(len(self.data.X)):
+                t = []
+                for j in range(len(self.X)):
+                    t.append(self.data.X[i] ** j)
+                X.append(t)
 
-            # print(X.shape)
-            X = np.squeeze(X, axis=1)
+            X = np.array(X)
 
-            # X = np.matrix(self.data.X)
-            # Xt = np.matrix(self.data.X).transpose()
             W = []
             for i in range(len(self.data.X)):
                 t = [0] * len(self.data.X)
-                t[i] =(rms * rms)
+                t[i] = (rms * rms)
                 W.append(t)
             W = np.matrix(W)
 
-            # print(X.T.shape)
-            # print(W.shape)
-
-            # matr = X.T @ W @ X
-            #
-            # print(matr.shape)
-            # print(matr)
-            matr = np.linalg.inv(X @ W @ X.T)
-
-            # print(matr.shape)
+            matr = np.linalg.inv(X.T @ W @ X)
             matr = np.abs(matr)
             matr = np.sqrt(matr)
             d = np.diag(matr)
 
-            # print(self.X)
-            # print(d)
-
+            print('        param               3*sigma')
             for i in range(self._k):
-                # print(f"{i}   {math.fabs(self.X[i])} < {3 * d[i]}")
                 if math.fabs(self.X[i]) < 3 * d[i]:
-                    print(f"{i}   {math.fabs(self.X[i])} < {3 * d[i]}")
-                    # print(f"{i} worked")
+                    print(f"{i+1}   {math.fabs(self.X[i])} < {3 * d[i]} - not needed")
+                else:
+                    print(f"{i + 1}   {math.fabs(self.X[i])} < {3 * d[i]} - good")
+
 
     def getGraphData(self):
 
@@ -92,12 +78,10 @@ class Polynomial:
 
     def cRms(self):
         observations = self.data.Y
-        ti = self.data.X
-
-        n = len(ti)
+        n = len(observations)
         summ = 0.
-        for index, (t, obs) in enumerate(zip(ti, observations)):
-            summ += (obs - self.p(t)) ** 2
+        for obs in observations:
+            summ += obs ** 2
 
         return math.sqrt(summ / n)
 
