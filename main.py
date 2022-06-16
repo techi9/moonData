@@ -63,8 +63,8 @@ def main():
         removed.append(removeErrors(pol, e))
         polynoms.append(Polynomial(session, k))
 
-    # writeToFile(polynoms, 'res.txt')
-    polynoms[s].k = 4
+    writeToFile(polynoms, 'res.txt')
+    polynoms[s].k = 6
     polynoms[s].solveX(1)
     drawRegressionGraph(polynoms[s], removed[s])
 
