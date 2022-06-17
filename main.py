@@ -51,7 +51,7 @@ def main():
     print(f"found {len(sessions)} sessions")
 
 
-    k = 3
+    startK = 3 # x^2 + x + c
     e = 3
     s = int(sys.argv[1]) - 1
 
@@ -59,13 +59,15 @@ def main():
     removed = []
 
     for session in sessions:
-        pol = Polynomial(session, k)
+        pol = Polynomial(session, startK)
+        pol.fitK()
         removed.append(removeErrors(pol, e))
-        polynoms.append(Polynomial(session, k))
+        polynoms.append(Polynomial(session, pol.k))
 
     writeToFile(polynoms, 'res.txt')
-    polynoms[s].k = 6
-    polynoms[s].solveX(1)
+    print()
+    # polynoms[s].k = 4
+    polynoms[s].solveX(1, 1)
     drawRegressionGraph(polynoms[s], removed[s])
 
     # plt.plot(x, y, '-r', label=f'y= p(x)')

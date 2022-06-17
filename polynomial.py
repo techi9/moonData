@@ -21,7 +21,14 @@ class Polynomial:
         self._k = newK
         self.solveX()
 
-    def solveX(self, check=0):
+
+    def fitK(self):
+        while self.solveX(1):
+            self._k += 1
+        self.k -= 1
+
+
+    def solveX(self, check=0, printRes = 0):
         A = self.data.matrFromData(self._k)
         B = self.data.rightSide(self._k)
         self.X = solve(A, B)
@@ -51,12 +58,19 @@ class Polynomial:
             matr = np.sqrt(matr)
             d = np.diag(matr)
 
-            print('        param               3*sigma')
+            ret = True
+            if printRes:
+                print('          param               3*sigma')
             for i in range(self._k):
                 if math.fabs(self.X[i]) < 3 * d[i]:
-                    print(f"{i+1}   {math.fabs(self.X[i])} < {3 * d[i]} - not needed")
+                    if printRes:
+                        print(f"x^{i}   {math.fabs(self.X[i])} < {3 * d[i]} - not needed")
+                    ret = False
                 else:
-                    print(f"{i + 1}   {math.fabs(self.X[i])} < {3 * d[i]} - good")
+                    if printRes:
+                        print(f"x^{i}   {math.fabs(self.X[i])} < {3 * d[i]} - good")
+
+            return ret
 
 
     def getGraphData(self):
